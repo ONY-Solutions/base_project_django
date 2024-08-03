@@ -7,7 +7,7 @@ from src.application.auth_module.models import (
     Rol_Resource,
     Resource,
     Permission,
-    Persons,
+    Person,
     User,
     Deparment
 )
@@ -21,6 +21,6 @@ admin.site.register(Rol_Permission)
 admin.site.register(Rol_Resource)
 admin.site.register(Resource)
 admin.site.register(Permission)
-admin.site.register(Persons)
+admin.site.register(Person)
 admin.site.register(User)
 admin.site.register(Deparment)

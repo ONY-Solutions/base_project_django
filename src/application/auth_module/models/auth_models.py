@@ -39,7 +39,7 @@ class City(BaseModel):
         verbose_name_plural = "cities"
 
 
-class Persons(BaseModel):
+class Person(BaseModel):
     fullname = models.CharField(max_length=150, blank=False, default="")
     identification = models.CharField(
         max_length=40, unique=True, blank=False, default=""
@@ -55,7 +55,7 @@ class User(AbstractUser, BaseModel):
     username = models.CharField(blank=False, null=False, unique=True, max_length=256)
     password = models.CharField(max_length=100)
     person = models.ForeignKey(
-        Persons, on_delete=models.SET_NULL, blank=True, null=True, db_index=True
+        Person, on_delete=models.SET_NULL, blank=True, null=True, db_index=True
     )
 
     roles = models.ManyToManyField(Rol, related_name="user_roles", db_index=True)
