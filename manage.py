@@ -13,7 +13,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
 def main():
     """Run administrative tasks."""
     ENV = env("ENV")
-    APPS = f"config.{ENV}"
+    APPS = f"config.app.{ENV}"
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', APPS)
     try:
         from django.core.management import execute_from_command_line

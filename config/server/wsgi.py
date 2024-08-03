@@ -15,7 +15,7 @@ import environ
 env = environ.Env()
 ENV = env("ENV")
 
-APPS = f"config.{ENV}"
+APPS = f"config.app.{ENV}"
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', APPS)
 

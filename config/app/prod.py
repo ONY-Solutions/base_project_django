@@ -1,5 +1,5 @@
-from config.base import *
-from config.database import DATABASE_CONFIG
+from config.app.base import *
+from config.db.database import DATABASE_CONFIG
 
 DEBUG = True
 

@@ -1,6 +1,5 @@
-from config.base import BASE_DIR
+from config.app.base import BASE_DIR
 import environ
-
 
 env = environ.Env()
 DB_DEVELOP_NAME = env.str("DB_NAME", "")
