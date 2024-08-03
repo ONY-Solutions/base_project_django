@@ -1,0 +1,28 @@
+name: base_django
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: base_django
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - db_local
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - db_local
+    ports:
+      - 8080:8080
+
+volumes:
+  db_data:
+networks:
+  db_local:

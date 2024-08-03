@@ -22,6 +22,9 @@ class BaseModel(models.Model):
     )
     visible = models.BooleanField(default=True)
 
+    def __str__(self) -> str:
+        return str(self.pk)
+
     class Meta:
         abstract = True
         ordering = ['id']
