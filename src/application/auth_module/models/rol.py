@@ -25,4 +25,4 @@ class Rol_Resource(BaseModel):
 
 class Rol_Permission(BaseModel):
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
-    resource = models.ForeignKey(Permission, on_delete=models.CASCADE)
+    permission = models.ForeignKey(Permission, on_delete=models.CASCADE)

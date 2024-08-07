@@ -1,9 +1,10 @@
 from abc import ABC
+from django.db.models import Model
 
 
 class BaseRepository(ABC):
 
-    def __init__(self, Model) -> None:
+    def __init__(self, Model: Model) -> None:
         self.Model = Model
 
     def get_all(self, visible=True):

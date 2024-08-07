@@ -1,5 +1,5 @@
 from src.application.auth_module.api.repositories.permission_repository import PermissionRepository
-from src.application.auth_module.api.validators.error_handlres import ErrorHandler
+from src.domain.error_handlres import ErrorHandler
 from src.infrastructure.base_service import BaseService
 from django.db import transaction
 
@@ -39,5 +39,11 @@ class PermissionService(BaseService):
     def delete(self, pk):
         try:
             return self.serializer(self.repository.delete(pk)).data
+        except Exception as e:
+            return ErrorHandler.handle_error(e, self.model)
+
+    def permission_by_rol(self, pk):
+        try:
+            return self.serializer(self.repository.filter_by_rol(pk),many=True).data
         except Exception as e:
             return ErrorHandler.handle_error(e, self.model)
