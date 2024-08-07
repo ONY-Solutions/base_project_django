@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ViewSet
-from src.application.auth_module.api.serializers.permission_serializer import PermissionValidateSerializer, PermissionUpdateValidateSerializer
+from src.application.auth_module.api.serializers.permission_serializer import PermissionValidateSerializer, PermissionUpdateValidateSerializer, RolPermissionSerializer
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
@@ -10,6 +10,8 @@ from rest_framework.decorators import action
 class PermissionView(ViewSet):
 
     def get_serializer_class(self):
+        if self.action == "permission_by_rol":
+            return RolPermissionSerializer
         return PermissionValidateSerializer
 
     @property

@@ -2,14 +2,16 @@ from src.application.auth_module.api.repositories.permission_repository import P
 from src.domain.error_handlres import ErrorHandler
 from src.infrastructure.base_service import BaseService
 from django.db import transaction
+from src.application.auth_module.api.repositories.rol_repository import RolRepository
 
 
 class PermissionService(BaseService):
 
     model = "Permission"
 
-    def __init__(self, repository: PermissionRepository, serializer) -> None:
+    def __init__(self, repository: PermissionRepository, rol_repository: RolRepository, serializer) -> None:
         self.repository = repository
+        self.rol_repository = rol_repository
         self.serializer = serializer
 
     def get_all(self):
@@ -44,6 +46,7 @@ class PermissionService(BaseService):
 
     def permission_by_rol(self, pk):
         try:
-            return self.serializer(self.repository.filter_by_rol(pk),many=True).data
+            rol_data = self.rol_repository.get_by_id(pk)
+            return self.serializer({"rol": rol_data, "permissions": self.repository.filter_by_rol(pk)}).data
         except Exception as e:
             return ErrorHandler.handle_error(e, self.model)

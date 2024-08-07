@@ -54,7 +54,8 @@ class AuthModuleRepositoryFactory:
     @staticmethod
     def get_permission_service(serializer):
         repository = AuthModuleRepositoryFactory.get_permission_repository()
-        return PermissionService(repository, serializer)
+        rol_repository = AuthModuleRepositoryFactory.get_rol_repository()
+        return PermissionService(repository, rol_repository, serializer)
 
     @staticmethod
     def get_rol_permission_service(serializer):
