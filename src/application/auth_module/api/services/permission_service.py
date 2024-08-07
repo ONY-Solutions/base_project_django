@@ -1,14 +1,14 @@
-from src.application.auth_module.api.repositories.rol_repository import RolRepository
+from src.application.auth_module.api.repositories.permission_repository import PermissionRepository
 from src.application.auth_module.api.validators.error_handlres import ErrorHandler
 from src.infrastructure.base_service import BaseService
 from django.db import transaction
 
 
-class RolService(BaseService):
+class PermissionService(BaseService):
 
-    model = "Rol"
+    model = "Permission"
 
-    def __init__(self, repository: RolRepository, serializer) -> None:
+    def __init__(self, repository: PermissionRepository, serializer) -> None:
         self.repository = repository
         self.serializer = serializer
 

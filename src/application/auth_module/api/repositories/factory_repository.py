@@ -4,8 +4,12 @@ from src.application.auth_module.api.repositories.persons_repository import (
 from src.application.auth_module.api.repositories.rol_repository import RolRepository
 from src.application.auth_module.api.repositories.resource_respository import ResourceRepository
 from src.application.auth_module.api.services.person_service import PersonService
+
 from src.application.auth_module.api.services.resource_service import ResourceService
 
+from src.application.auth_module.api.services.rol_service import RolService
+from src.application.auth_module.api.repositories.permission_repository import PermissionRepository
+from src.application.auth_module.api.services.permission_service import PermissionService
 
 
 class AuthModuleRepositoryFactory:
@@ -17,6 +21,10 @@ class AuthModuleRepositoryFactory:
     @staticmethod
     def get_rol_repository():
         return RolRepository()
+    
+    @staticmethod
+    def get_permission_repository():
+        return PermissionRepository()
 
     @staticmethod
     def get_resource_repository():
@@ -30,9 +38,14 @@ class AuthModuleRepositoryFactory:
     @staticmethod
     def get_rol_service(serializer):
         repository = AuthModuleRepositoryFactory.get_rol_repository()
-        return PersonService(repository, serializer)
+        return RolService(repository, serializer)
 
     @staticmethod
     def get_resource_service(serializer):
         repository = AuthModuleRepositoryFactory.get_resource_repository()
         return ResourceService(repository, serializer)
+
+    @staticmethod
+    def get_permission_service(serializer):
+        repository = AuthModuleRepositoryFactory.get_permission_repository()
+        return PermissionService(repository, serializer)

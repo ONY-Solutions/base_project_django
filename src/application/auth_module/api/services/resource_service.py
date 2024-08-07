@@ -2,9 +2,12 @@ from src.application.auth_module.api.repositories.resource_respository import (
     ResourceRepository,
 )
 from src.infrastructure.base_service import BaseService
-
+from src.application.auth_module.api.validators.error_handlres import ErrorHandler
+from django.db.models import ObjectDoesNotExist
 
 class ResourceService(BaseService):
+    
+    model = "Resource"
 
     def __init__(self, repository: ResourceRepository, serializer) -> None:
         self.repository = repository
@@ -16,17 +19,26 @@ class ResourceService(BaseService):
     def get_by_id(self, pk):
         try:
             return self.serializer(self.repository.get_by_id(pk)).data
+        # except ObjectDoesNotExist as e:
+        #     return ErrorHandler.handle_error(e, self.model)
         except Exception as e:
-            return e.args
+            return ErrorHandler.handle_error(e, self.model)
 
     def create(self,payload):
         try:
-            return self.serializer(self.repository.create(payload))
+            return self.serializer(self.repository.create(payload)).data
         except Exception as e:
-            return e.args
+            return ErrorHandler.handle_error(e, self.model)
 
-    def update(self):
-        pass
 
-    def delete(self):
-        pass
+    def update(self,pk,payload):
+        try:
+            return self.serializer(self.repository.update(pk,payload)).data
+        except Exception as e:
+            return ErrorHandler.handle_error(e, self.model)
+
+    def delete(self,pk):
+        try:
+            return self.serializer(self.repository.delete(pk)).data
+        except Exception as e:
+            return ErrorHandler.handle_error(e, self.model)

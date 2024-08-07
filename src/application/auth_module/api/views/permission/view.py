@@ -1,19 +1,19 @@
 from rest_framework.viewsets import ViewSet
-from src.application.auth_module.api.serializers.rol_serializer import RolValidateSerializer
+from src.application.auth_module.api.serializers.permission_serializer import PermissionValidateSerializer, PermissionUpdateValidateSerializer
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
 from rest_framework.response import Response
 
 
-class RolView(ViewSet):
+class PermissionView(ViewSet):
 
     def get_serializer_class(self):
-        return RolValidateSerializer
+        return PermissionValidateSerializer
 
     @property
     def get_service(self):
-        return AuthModuleRepositoryFactory.get_rol_service(self.get_serializer_class())
+        return AuthModuleRepositoryFactory.get_permission_service(self.get_serializer_class())
 
     def list(self, request):
         res = self.get_service.get_all()
@@ -25,7 +25,7 @@ class RolView(ViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        serializer = RolValidateSerializer(data=data)
+        serializer = PermissionValidateSerializer(data=data)
 
         if serializer.is_valid():
             res = self.get_service.create(serializer.data)
@@ -35,7 +35,7 @@ class RolView(ViewSet):
     def update(self, request, pk=None):
 
         data = request.data
-        serializer = RolValidateSerializer(data=data)
+        serializer = PermissionUpdateValidateSerializer(data=data)
 
         if serializer.is_valid():
             res = self.get_service.update(pk, serializer.data)

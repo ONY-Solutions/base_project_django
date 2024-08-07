@@ -36,26 +36,22 @@ class ResourceViewSet(viewsets.ViewSet):
         return Response(res)
 
     def create(self, request):
-        ResourceCreateValidator().validate(data=request.data)
-        try:
-            self.get_service.create(request.data)
-            return Response(ResponseMessages.CREATED, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response(e.args, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = request.data
+        serializer = ResourceSerializer(data=data)
+        if serializer.is_valid():
+            res = self.get_service.create(serializer.data)
+            return Response(res, 200)
+        return Response(serializer.errors, 404)
 
     def update(self, request, pk=None):
-        person = self.get_service.get_by_id(pk)
-        if person is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ResourceSerializer(person, data=request.data)
+        data = request.data
+        serializer = ResourceSerializer(data=data)
+
         if serializer.is_valid():
-            updated_person = self.get_service.update(pk, serializer.validated_data)
-            return Response(ResourceSerializer(updated_person).data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            res = self.get_service.update(pk, serializer.data)
+            return Response(res, 200)
+        return Response(serializer.errors, 404)
 
     def destroy(self, request, pk=None):
-        person = self.get_service.get_by_id(pk)
-        if person is None:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        self.get_service.delete(pk)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        res = self.get_service.delete(pk)
+        return Response(res,status=status.HTTP_200_OK)
