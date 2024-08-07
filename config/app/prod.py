@@ -3,10 +3,10 @@ from config.db.database import DATABASE_CONFIG
 
 DEBUG = True
 
-COMMON_APPS = ['rest_framework']
-THIRDS_APPS = ['src.application.auth_module']
 
-INSTALLED_APPS = BASE_APPS + COMMON_APPS + THIRDS_APPS
+THIRDS_APPS += []
+
+INSTALLED_APPS = COMMON_APPS + THIRDS_APPS + MY_APPS 
 
 ALLOWED_HOSTS = []
 

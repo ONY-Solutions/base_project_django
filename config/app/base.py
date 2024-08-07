@@ -21,13 +21,19 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_OR_KEY")
 
-BASE_APPS = [
+COMMON_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+THIRDS_APPS = [
+    'rest_framework'
+]
+MY_APPS = [
+    'src.application.auth_module'
 ]
 
 AUTH_USER_MODEL = 'auth_module.User'

@@ -5,10 +5,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-COMMON_APPS = ['rest_framework']
-THIRDS_APPS = ['src.application.auth_module']
+THIRDS_APPS += []
 
-INSTALLED_APPS = BASE_APPS + COMMON_APPS + THIRDS_APPS
+INSTALLED_APPS = COMMON_APPS + THIRDS_APPS + MY_APPS 
 
 MIDDLEWARE += []
 
