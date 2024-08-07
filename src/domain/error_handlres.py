@@ -1,7 +1,5 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
-
-
 class ErrorHandler:
     @staticmethod
     def handle_error(exception, model):

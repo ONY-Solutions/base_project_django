@@ -7,16 +7,13 @@ from src.application.auth_module.api.repositories.factory_repository import (
 )
 from src.application.auth_module.api.serializers.person_serializers import (
     PersonSerializer,
-    PersonCreateSerializer,
 )
 
 
 class PersonViewSet(viewsets.ViewSet):
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
-            return PersonSerializer
-        return PersonCreateSerializer
+        return PersonSerializer
 
     @property
     def get_service(self):
