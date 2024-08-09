@@ -28,8 +28,7 @@ class CustomResponseMiddleware(MiddlewareMixin):
             custom_response = {
                 'status': response.status_code,
                 'errors': errors,
-                'data': data,  
-                'message': '',  
+                'data': data,   
                 'method': request.method,
                 'url': request.get_full_path()
             }
