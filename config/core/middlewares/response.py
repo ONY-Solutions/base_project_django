@@ -9,17 +9,27 @@ class CustomResponseMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
 
         if 'application/json' in response['Content-Type']:
-            try:
-                data = json.loads(response.content)
-            except json.JSONDecodeError:
-                data = {}
 
-            errors = data.get('errors', None)
+            status_validos = [200,201,202,203,204,205,206,207,208,226]
+            
+            try:
+                if (response.status_code in status_validos):
+                    data = json.loads(response.content)
+                    errors = None
+                else:     
+                    data    = None
+                    errors  = json.loads(response.content)
+
+            except json.JSONDecodeError:
+                data = None
+                errors = None
+
             
             custom_response = {
                 'status': response.status_code,
                 'errors': errors,
-                'data': data.get('data', None),  
+                'data': data,  
+                'message': '',  
                 'method': request.method,
                 'url': request.get_full_path()
             }
