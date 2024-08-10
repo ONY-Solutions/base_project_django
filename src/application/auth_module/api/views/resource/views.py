@@ -12,7 +12,7 @@ from src.application.auth_module.api.serializers.resource_serializers import (
     ResourceSerializer
 )
 from src.application.auth_module.api.validators.resource_validators import (
-    ResourceCreateValidator
+    ResourcesPayloadValidateSerializer
 )
 
 
@@ -36,12 +36,10 @@ class ResourceViewSet(viewsets.ViewSet):
         return Response(res)
 
     def create(self, request):
+        ResourcesPayloadValidateSerializer().validate(request.data)
         data = request.data
-        serializer = ResourceSerializer(data=data)
-        if serializer.is_valid():
-            res = self.get_service.create(serializer.data)
-            return Response(res, 200)
-        return Response(serializer.errors, 404)
+        res = self.get_service.create(data)
+        return Response(res, 200)
 
     def update(self, request, pk=None):
         data = request.data

@@ -5,6 +5,7 @@ from src.application.default.base_models import BaseModel
 class Resource(BaseModel):
     name = models.CharField(max_length=30, null=False)
     path = models.CharField(max_length=30, null=False, unique=True)
+    icon = models.CharField(max_length=30, null=False, default="")
     resource_parent = models.ForeignKey(
         "Resource", null=True, blank=True, on_delete=models.SET_NULL
     )
