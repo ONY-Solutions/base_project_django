@@ -10,6 +10,9 @@ class BaseRepository(ABC):
     def get_all(self, visible=True):
         return self.Model.objects.filter(visible=visible)
 
+    def filter_custom(self, **kwargs):
+        return self.Model.objects.filter(**kwargs)
+
     def get_by_id(self, pk):
         return self.Model.objects.get(id=pk)
 
@@ -17,7 +20,7 @@ class BaseRepository(ABC):
         return self.Model.objects.create(**data)
 
     def update(self, pk, data):
-        query = self.Model.objects.get(id=pk,visible=True)
+        query = self.Model.objects.get(id=pk, visible=True)
         for key, value in data.items():
             setattr(query, key, value)
         query.save()

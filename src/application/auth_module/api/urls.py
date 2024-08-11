@@ -7,8 +7,6 @@ urlpatterns = [
     path('', include('src.application.auth_module.api.views.resource.urls'), name='resource'),
     path('user', include('src.application.auth_module.api.views.user.urls'), name='user'),
     path('', include('src.application.auth_module.api.views.rol.urls'), name='rol'),
-    path('', include(
-        'src.application.auth_module.api.views.permission.urls'), name='permission'),
-    path('', include('src.application.auth_module.api.views.rol_permission.urls'),
-         name='rol-permission'),
+    path('', include('src.application.auth_module.api.views.permission.urls'), name='permission'),
+    path('', include('src.application.auth_module.api.views.security.urls'),name='security'),
 ]

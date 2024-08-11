@@ -3,15 +3,17 @@ from src.application.auth_module.api.repositories.persons_repository import (
 )
 from src.application.auth_module.api.repositories.rol_repository import RolRepository
 from src.application.auth_module.api.repositories.resource_respository import ResourceRepository
-from src.application.auth_module.api.services.person_service import PersonService
+from src.application.auth_module.api.repositories.permission_repository import PermissionRepository
+from src.application.auth_module.api.repositories.rol_permission_repository import RolPermissionRepository
+from src.application.auth_module.api.repositories.rol_resource_repository import RolResourceRepository
+
 
 from src.application.auth_module.api.services.resource_service import ResourceService
-
+from src.application.auth_module.api.services.person_service import PersonService
 from src.application.auth_module.api.services.rol_service import RolService
-from src.application.auth_module.api.repositories.permission_repository import PermissionRepository
 from src.application.auth_module.api.services.permission_service import PermissionService
 from src.application.auth_module.api.services.rol_permission_service import RolPermissionService
-from src.application.auth_module.api.repositories.rol_permission_repository import RolPermissionRepository
+from src.application.auth_module.api.services.security_service import SecurityService
 
 
 class AuthModuleRepositoryFactory:
@@ -35,6 +37,9 @@ class AuthModuleRepositoryFactory:
     @staticmethod
     def get_resource_repository():
         return ResourceRepository()
+    @staticmethod
+    def get_rol_resource_repository():
+        return RolResourceRepository()
 
     @staticmethod
     def get_person_service(serializer):
@@ -61,3 +66,10 @@ class AuthModuleRepositoryFactory:
     def get_rol_permission_service(serializer):
         repository = AuthModuleRepositoryFactory.get_rol_permission_repository()
         return RolPermissionService(repository, serializer)
+
+    @staticmethod
+    def get_rol_resource_service(serializer):
+        rol_repository = AuthModuleRepositoryFactory.get_rol_repository()
+        resource_repository = AuthModuleRepositoryFactory.get_resource_repository()
+        rol_resource_repository = AuthModuleRepositoryFactory.get_rol_resource_repository()
+        return SecurityService(rol_repository, resource_repository,rol_resource_repository, serializer)

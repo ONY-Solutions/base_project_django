@@ -3,8 +3,6 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from config.core.constants.response_messages import ResponseMessages
-
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory
 )

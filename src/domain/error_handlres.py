@@ -3,9 +3,6 @@ from django.core.exceptions import ObjectDoesNotExist
 class ErrorHandler:
     @staticmethod
     def handle_error(exception, model):
-
-        print(exception)
-        
         if isinstance(exception, ObjectDoesNotExist):
             return {"error": "Invalid data.", "details": str(exception), "status": 404}
         elif isinstance(exception, IntegrityError):
