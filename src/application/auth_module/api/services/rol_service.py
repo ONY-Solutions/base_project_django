@@ -1,11 +1,7 @@
 from src.application.auth_module.api.repositories.rol_repository import RolRepository
-from src.domain.error_handlres import ErrorHandler
 from src.infrastructure.base_service import BaseService
-from django.db import transaction
-
 
 class RolService(BaseService):
-
     model = "Rol"
 
     def __init__(self, repository: RolRepository, serializer) -> None:
@@ -16,28 +12,13 @@ class RolService(BaseService):
         return self.serializer(self.repository.get_all(), many=True).data
 
     def get_by_id(self, pk):
-        try:
-            return self.serializer(self.repository.get_by_id(pk)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.get_by_id(pk)).data
 
-    @transaction.atomic
     def create(self, data):
-        try:
-            return self.serializer(self.repository.create(data)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.create(data)).data
 
-    @transaction.atomic
     def update(self, pk, data):
-        try:
-            return self.serializer(self.repository.update(pk, data)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
-
-    @transaction.atomic
+        return self.serializer(self.repository.update(pk, data)).data
+    
     def delete(self, pk):
-        try:
-            return self.serializer(self.repository.delete(pk)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.delete(pk)).data

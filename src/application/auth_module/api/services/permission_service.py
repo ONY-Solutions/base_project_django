@@ -18,35 +18,18 @@ class PermissionService(BaseService):
         return self.serializer(self.repository.get_all(), many=True).data
 
     def get_by_id(self, pk):
-        try:
-            return self.serializer(self.repository.get_by_id(pk)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.get_by_id(pk)).data
 
-    @transaction.atomic
     def create(self, data):
-        try:
-            return self.serializer(self.repository.create(data)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.create(data)).data
 
-    @transaction.atomic
     def update(self, pk, data):
-        try:
-            return self.serializer(self.repository.update(pk, data)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.update(pk, data)).data
 
-    @transaction.atomic
     def delete(self, pk):
-        try:
-            return self.serializer(self.repository.delete(pk)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.delete(pk)).data
 
     def permission_by_rol(self, pk):
-        try:
-            rol_data = self.rol_repository.get_by_id(pk)
-            return self.serializer({"rol": rol_data, "permissions": self.repository.filter_by_rol(pk)}).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        rol_data = self.rol_repository.get_by_id(pk)
+        return self.serializer({"rol": rol_data, "permissions": self.repository.filter_by_rol(pk)}).data
+

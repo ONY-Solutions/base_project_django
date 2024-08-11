@@ -14,10 +14,7 @@ class PersonService(BaseService):
         return self.serializer(self.repository.get_all(), many=True).data
 
     def get_by_id(self, pk):
-        try:
-            return self.serializer(self.repository.get_by_id(pk)).data
-        except Exception as e:
-            return e.args
+        return self.serializer(self.repository.get_by_id(pk)).data
 
     def create(self):
         pass

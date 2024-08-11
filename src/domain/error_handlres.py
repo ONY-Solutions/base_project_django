@@ -4,13 +4,15 @@ class ErrorHandler:
     @staticmethod
     def handle_error(exception, model):
 
-        if isinstance(exception, IntegrityError):
-            return {"error": "Integrity error.", "details": f"A {model} with this data already exists or violates integrity constraints."}
+        print(exception)
+        
+        if isinstance(exception, ObjectDoesNotExist):
+            return {"error": "Invalid data.", "details": str(exception), "status": 404}
+        elif isinstance(exception, IntegrityError):
+            return {"error": "Integrity error.", "details": f"A {model} with this data already exists or violates integrity constraints.", "status": 400}
         elif isinstance(exception, KeyError):
-            return {"error": f"{model} not found.", "details": str(exception)}
+            return {"error": f"{model} Error", "details": str(exception), "status": 400}
         elif isinstance(exception, ValueError):
-            return {"error": "Invalid data.", "details": str(exception)}
-        elif isinstance(exception, ObjectDoesNotExist):
-            return {"error": "Invalid data.", "details": str(exception)}
+            return {"error": "Invalid data.", "details": str(exception), "status": 400}
         else:
-            return {"error": "An unexpected error occurred.", "details": str(exception)}
+            return {"error": "An unexpected error occurred.", "details": str(exception), "status": 500}

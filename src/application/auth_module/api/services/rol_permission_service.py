@@ -16,28 +16,13 @@ class RolPermissionService(BaseService):
         return self.serializer(self.repository.get_all(), many=True).data
 
     def get_by_id(self, pk):
-        try:
-            return self.serializer(self.repository.get_by_id(pk)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.get_by_id(pk)).data
 
-    @transaction.atomic
     def create(self, data):
-        try:
-            return self.serializer(self.repository.create(data)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.create(data)).data
 
-    @transaction.atomic
     def update(self, pk, data):
-        try:
-            return self.serializer(self.repository.update(pk, data)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.update(pk, data)).data
 
-    @transaction.atomic
     def delete(self, pk):
-        try:
-            return self.serializer(self.repository.delete(pk)).data
-        except Exception as e:
-            return ErrorHandler.handle_error(e, self.model)
+        return self.serializer(self.repository.delete(pk)).data

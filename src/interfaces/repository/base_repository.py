@@ -17,7 +17,7 @@ class BaseRepository(ABC):
         return self.Model.objects.create(**data)
 
     def update(self, pk, data):
-        query = self.Model.objects.get(id=pk)
+        query = self.Model.objects.get(id=pk,visible=True)
         for key, value in data.items():
             setattr(query, key, value)
         query.save()

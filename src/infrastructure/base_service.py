@@ -1,7 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from src.domain.response_handlrer import ServiceMeta
 
 
-class BaseService(ABC):
+class BaseService(metaclass=ServiceMeta):
 
     @abstractmethod
     def get_all(self):
