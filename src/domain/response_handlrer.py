@@ -1,19 +1,18 @@
 import functools
 from abc import ABCMeta
 from src.domain.error_handlres import ErrorHandler
-from django.db.transaction import atomic, rollback
+from django.db.transaction import rollback
 
 def format_method(method):
     @functools.wraps(method)
     def wrapper(*args, **kwargs):
         try:
-            with atomic():
-                result = method(*args, **kwargs)
-                return {"status": 200, "data": result}
+            result = method(*args, **kwargs)
+            return {"status": 200, "data": result if result else "Ok"}
         except Exception as e:
             rollback()
             response = ErrorHandler.handle_error(e,args[0].model)
-            return {"status":response["status"], "error": response["details"]}
+            return {"status":response["status"], "data": response["details"]}
     return wrapper
 
 

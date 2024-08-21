@@ -33,9 +33,7 @@ class PersonViewSet(viewsets.ViewSet):
         serializer = PersonSerializer(data=request.data)
         if serializer.is_valid():
             person = self.get_service.create(serializer.validated_data)
-            return Response(
-                PersonSerializer(person).data, status=status.HTTP_201_CREATED
-            )
+            return Response(**person)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
@@ -45,12 +43,12 @@ class PersonViewSet(viewsets.ViewSet):
         serializer = PersonSerializer(person, data=request.data)
         if serializer.is_valid():
             updated_person = self.get_service.update(pk, serializer.validated_data)
-            return Response(PersonSerializer(updated_person).data)
+            return Response(**updated_person)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
         person = self.get_service.get_by_id(pk)
         if person is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        self.get_service.delete(pk)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        res = self.get_service.delete(pk)
+        return Response(**res)

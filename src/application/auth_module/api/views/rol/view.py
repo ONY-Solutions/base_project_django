@@ -17,11 +17,11 @@ class RolView(ViewSet):
 
     def list(self, request):
         res = self.get_service.get_all()
-        return Response(res)
+        return Response(**res)
 
     def retrieve(self, request, pk=None):
         res = self.get_service.get_by_id(pk)
-        return Response(res)
+        return Response(**res)
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -29,7 +29,7 @@ class RolView(ViewSet):
 
         if serializer.is_valid():
             res = self.get_service.create(serializer.data)
-            return Response(res, 200)
+            return Response(**res)
         return Response(serializer.errors, 404)
 
     def update(self, request, pk=None):
@@ -39,9 +39,9 @@ class RolView(ViewSet):
 
         if serializer.is_valid():
             res = self.get_service.update(pk, serializer.data)
-            return Response(res, 200)
+            return Response(**res)
         return Response(serializer.errors, 404)
 
     def destroy(self, request, pk=None):
         res = self.get_service.delete(pk)
-        return Response(res, status=200)
+        return Response(**res)
