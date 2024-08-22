@@ -1,6 +1,7 @@
 import functools
 from abc import ABCMeta
 from src.domain.error_handlres import ErrorHandler
+from src.domain.exceptions_db import custom_exception_handler
 from django.db.transaction import rollback
 
 def format_method(method):
@@ -11,6 +12,7 @@ def format_method(method):
             return {"status": 200, "data": result if result else "Ok"}
         except Exception as e:
             rollback()
+            custom_exception_handler(e, args)
             response = ErrorHandler.handle_error(e,args[0].model)
             return {"status":response["status"], "data": response["details"]}
     return wrapper

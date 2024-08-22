@@ -13,12 +13,13 @@ class CustomResponseMiddleware(MiddlewareMixin):
             status_validos = [200,201,202,203,204,205,206,207,208,226]
             
             try:
+                value = json.loads(response.content)
                 if (response.status_code in status_validos):
-                    data = json.loads(response.content)
-                    errors = None
+                    data    = value
+                    errors  = None
                 else:     
                     data    = None
-                    errors  = json.loads(response.content)
+                    errors  = value
 
             except json.JSONDecodeError:
                 data = None
