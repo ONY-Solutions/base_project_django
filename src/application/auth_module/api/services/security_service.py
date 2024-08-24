@@ -6,6 +6,7 @@ from src.application.auth_module.api.repositories.rol_resource_repository import
     RolResourceRepository)
 from src.application.auth_module.api.repositories.permission_repository import (
     PermissionRepository)
+from src.application.auth_module.api.repositories.user_repository import UserRepository
 from src.application.auth_module.api.repositories.rol_permission_repository import RolPermissionRepository
 from src.infrastructure.base_service import BaseService
 from django.db.transaction import atomic
@@ -14,17 +15,18 @@ class SecurityService(BaseService):
 
     model = "RolResource"
 
-    def __init__(self, rol_repository: RolRepository, resource_respository: ResourceRepository, rol_resource_repository: RolResourceRepository, permission_repository: PermissionRepository,rol_permission_repository: RolPermissionRepository, serializer) -> None:
+    def __init__(self, rol_repository: RolRepository, resource_respository: ResourceRepository, rol_resource_repository: RolResourceRepository, permission_repository: PermissionRepository,rol_permission_repository: RolPermissionRepository, user_repository: UserRepository ,serializer) -> None:
         self.rol_repository = rol_repository
         self.resource_respository = resource_respository
         self.rol_resource_repository = rol_resource_repository
         self.permission_repository = permission_repository
         self.rol_permission_repository = rol_permission_repository
+        self.user_repository = user_repository
         self.serializer = serializer
 
     def getResourcesByRol(self, pk):
         rol = self.rol_repository.get_by_id(pk)
-        resources = self.resource_respository.filter_custom(rol=rol.pk)
+        resources = self.resource_respository.filter_custom(rol=pk)
         responseValue = {"rol": rol, "resources": resources}
         return self.serializer(responseValue).data
 
@@ -36,16 +38,16 @@ class SecurityService(BaseService):
         payload_resources_ids = set(data)
 
         resources_to_add = payload_resources_ids - current_resources_ids
-        resources_to_remove = current_resources_ids - resources_to_add
+        resources_to_remove = current_resources_ids.symmetric_difference(payload_resources_ids)
         
-        for resource in resources_to_add:
-            body = {"rol_id": rol.pk, "resource_id": resource}
-            self.rol_resource_repository.create(body)
-            
         for resource in resources_to_remove:
             x = self.rol_resource_repository.filter_custom(resource_id=resource).first()
             if x is not None:
-                self.rol_resource_repository.delete(x.pk)
+                x.delete()
+
+        for resource in resources_to_add:
+            body = {"rol_id": rol.pk, "resource_id": resource}
+            self.rol_resource_repository.create(body)
 
         return self.serializer({"OK": "OK"}).data
 
@@ -75,6 +77,18 @@ class SecurityService(BaseService):
             self.rol_permission_repository.create(body)
 
         return self.serializer({"OK": "OK"}).data
+
+    @atomic
+    def asingUserRol(self, pk, data):
+        
+        user = self.user_repository.get_by_id(pk)
+        user.roles.set(data)
+
+        return self.serializer(user).data
+
+    def getAllResourcesByRol(self, **kwargs):
+        resources = self.resource_respository.complex_filters(**kwargs)
+        return self.serializer(resources,many=True).data
 
     def get_all(self):
         pass

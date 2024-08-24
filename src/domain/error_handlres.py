@@ -9,7 +9,7 @@ class ErrorHandler:
         elif isinstance(exception, IntegrityError):
             if type(exception.args) == tuple:
                 if 'foreign key constraint' in str(exception.args[0]):
-                    return {"error": "Integrity Error.", "details": "Permission with that id don't exist", "status": 400}
+                    return {"error": "Integrity Error.", "details": f"{model} with that id don't exist", "status": 400}
             return {"error": "Integrity error.", "details": f"A {model} with this data already exists or violates integrity constraints.", "status": 400}
         elif isinstance(exception, KeyError):
             return {"error": f"{model} Error", "details": str(exception), "status": 400}

@@ -9,4 +9,5 @@ urlpatterns = [
     path('', include('src.application.auth_module.api.views.rol.urls'), name='rol'),
     path('', include('src.application.auth_module.api.views.permission.urls'), name='permission'),
     path('', include('src.application.auth_module.api.views.security.urls'),name='security'),
+    path('', include('src.application.auth_module.api.views.auth.urls'),name='auth'),
 ]

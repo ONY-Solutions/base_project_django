@@ -10,6 +10,10 @@ class RolService(BaseService):
 
     def get_all(self):
         return self.serializer(self.repository.get_all(), many=True).data
+    
+    
+    def get_filter(self, **kwargs):
+        return self.serializer(self.repository.filter_custom(kwargs))
 
     def get_by_id(self, pk):
         return self.serializer(self.repository.get_by_id(pk)).data
