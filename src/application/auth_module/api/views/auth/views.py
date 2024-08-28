@@ -10,6 +10,7 @@ from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
 from src.application.auth_module.api.serializers.resource_serializers import ResourceSerializer
+from src.application.auth_module.api.serializers.user_serializers import UserSerializer
 class AuthView(ViewSet):
     
     def get_serializer_class(self):
@@ -47,6 +48,17 @@ class AuthView(ViewSet):
                 "resources": resources["data"]
                 }, status=status.HTTP_200_OK)
         return Response({"Invalid credentias"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+    @action(detail=False, methods=["GET"])
+    def getResources(self, request):
+        roles = [x.id for x in request.user.roles.all()]
+        resources = self.get_service.getAllResourcesByRol(related={"resource_parent"},filter={"rol__in": roles})
+        
+        user = UserSerializer([request.user], many=True)
+        
+        return Response({"user": user.data[0], "resources": resources["data"]},status=status.HTTP_200_OK)
+
 
     @action(detail=False, methods=["POST"])
     def register(self, request):
