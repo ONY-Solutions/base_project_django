@@ -34,19 +34,7 @@ class AuthView(ViewSet):
 
         if validator.is_valid():
             token = get_tokens_for_user(validator.validated_data)
-        
-            roles = [x.id for x in validator.validated_data.roles.all()]
-            
-            resources = self.get_service.getAllResourcesByRol(related={"resource_parent"},filter={"rol__in": roles})
-            
-            return Response({"user": {
-                "first_name": validator.validated_data.first_name,
-                "last_name": validator.validated_data.last_name,
-                "email": validator.validated_data.email
-                }, 
-                "token":{**token}, 
-                "resources": resources["data"]
-                }, status=status.HTTP_200_OK)
+            return Response({ "token" :{ **token } }, status=status.HTTP_200_OK)
         return Response({"Invalid credentias"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
