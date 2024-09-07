@@ -3,12 +3,11 @@ from config.db.database import DATABASE_CONFIG
 
 DEBUG = True
 
+ALLOWED_HOSTS = ["*","192.168.20.32"]
 
 THIRDS_APPS += []
 
 INSTALLED_APPS = COMMON_APPS + THIRDS_APPS + MY_APPS 
-
-ALLOWED_HOSTS = []
 
 MIDDLEWARE += []
 
