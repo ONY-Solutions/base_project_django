@@ -4,6 +4,22 @@ from django.utils.translation import gettext_lazy as _
 from src.application.default.base_models import BaseModel
 from src.application.auth_module.models.rol import Rol
 
+
+class Master(BaseModel):
+    code = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200)
+    order = models.IntegerField(null=True, blank=True)
+    note = models.CharField(max_length=250, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children')
+
+
+    class Meta:
+        db_table = 'master'
+        indexes = [
+            models.Index(fields=['parent'], name='master_parent_id_idx'),
+        ]
+
+
 class Country(BaseModel):
     name = models.CharField(max_length=200)
     sap = models.CharField(max_length=10)

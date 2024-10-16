@@ -1,5 +1,6 @@
 from django.contrib import admin
 from src.application.auth_module.models import (
+    Master,
     City,
     Country,
     Rol,
