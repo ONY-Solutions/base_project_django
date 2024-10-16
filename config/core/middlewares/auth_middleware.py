@@ -37,7 +37,10 @@ class CustomMiddleware(MiddlewareMixin):
         """
         routes_free = [
             "/auth/login/",
-            "/auth/register/"
+            "/auth/register/",
+            "/api/swagger/",
+            "/favicon.ico",
+            "/api/schema/"
         ]
 
         match = re.search("|".join(routes_free), request.path)

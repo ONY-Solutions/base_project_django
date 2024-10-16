@@ -10,16 +10,25 @@ from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
 from src.application.auth_module.api.serializers.resource_serializers import ResourceSerializer
+from src.application.auth_module.api.serializers.auth_serializer import AuthSerializer, SchemaResponseLogin
 from src.application.auth_module.api.serializers.user_serializers import UserSerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
+
 class AuthView(ViewSet):
     
     def get_serializer_class(self):
+        if self.action == "login":
+            return AuthSerializer
         return ResourceSerializer
     
     @property
     def get_service(self):
         return AuthModuleRepositoryFactory.get_security_service(self.get_serializer_class())
     
+    @extend_schema(
+        responses={200: SchemaResponseLogin},
+    )
     @action(detail=False, methods=["POST"])
     def login(self, request):
         data = {}
