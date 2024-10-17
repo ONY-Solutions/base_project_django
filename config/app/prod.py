@@ -1,7 +1,7 @@
 from config.app.base import *
 from config.db.database import DATABASE_CONFIG
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*","192.168.20.32"]
 
@@ -17,3 +17,5 @@ MIDDLEWARE += []
 DATABASE = env("DATABASE")
 
 DATABASES = {'default': DATABASE_CONFIG["prod"][DATABASE]}
+
+FORCE_SCRIPT_NAME = '/base'

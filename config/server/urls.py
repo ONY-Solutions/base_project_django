@@ -15,14 +15,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+import environ
 
-
+env = environ.Env()
+base_prefix = "api/schema/"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('src.application.auth_module.api.urls')),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/swagger/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
+
+ENV = env("ENV")
+
+if ENV == "prod":
+    urlpatterns += [    
+        path(f'{base_prefix}', SpectacularAPIView.as_view(), name='schema'),
+        path(f'{base_prefix}/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
+    ]
+else:
+    urlpatterns += [    
+        path(f'{base_prefix}', SpectacularAPIView.as_view(), name='schema'),
+        path(f'{base_prefix}/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
+    ]
+
+
+urlpatterns += [path('api/swagger/', SpectacularRedocView.as_view(url_name='schema'), name='redoc')]
