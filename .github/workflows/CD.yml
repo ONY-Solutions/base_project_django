@@ -37,5 +37,5 @@ jobs:
             --push .
 
       - name: Output version
-        run:
+        run: |
           echo "Deployed version: ${{ env.VERSION }}"
