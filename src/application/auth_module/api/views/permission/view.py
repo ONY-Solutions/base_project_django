@@ -1,10 +1,12 @@
+from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 from src.application.auth_module.api.serializers.permission_serializer import PermissionValidateSerializer, PermissionUpdateValidateSerializer, RolPermissionSerializer
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
 from rest_framework.response import Response
-
+from drf_spectacular.utils import extend_schema
+from src.application.auth_module.api.serializers.permission_serializer import SchemaResponsePermissions
 
 class PermissionView(ViewSet):
 
@@ -15,11 +17,24 @@ class PermissionView(ViewSet):
     def get_service(self):
         return AuthModuleRepositoryFactory.get_permission_service(self.get_serializer_class())
 
+    @extend_schema(
+        responses={200: SchemaResponsePermissions},
+    )
     def list(self, request):
         res = self.get_service.get_all()
-        return Response(res)
+        return Response(**res)
 
+    @extend_schema(
+        responses={200: SchemaResponsePermissions},
+    )
     def retrieve(self, request, pk=None):
+        
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
+        
         res = self.get_service.get_by_id(pk)
         return Response(**res)
 

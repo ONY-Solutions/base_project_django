@@ -9,7 +9,7 @@ def format_method(method):
     def wrapper(*args, **kwargs):
         try:
             result = method(*args, **kwargs)
-            return {"status": 200, "data": result if result else "Ok"}
+            return {"status": 200, "data": result}
         except Exception as e:
             rollback()
             custom_exception_handler(e, args)

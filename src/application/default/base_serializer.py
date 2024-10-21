@@ -1,31 +1,35 @@
-import copy
 from rest_framework import serializers
+
+class Geeks(object):
+    def __init__(self, dictionary):
+        self.dict = dictionary
+
 class BaseSerializer(serializers.Serializer):
-    
     def __init__(self, instance=None, data=..., **kwargs):
+        # Guardamos la definición original de los campos antes de llamar a super()
+        original_fields = self._declared_fields.copy()
+        
+        # Limpiamos los campos declarados para que super() no los procese
+        self._declared_fields.clear()
+        
+        # Llamamos al constructor padre
         super().__init__(instance, data, **kwargs)
-
-        original_fields = {name: field for name, field in self.fields.items()}
         
-        self.fields.clear()
-        
+        # Creamos un nuevo Serializer para contener los campos originales
         class DataSerializer(serializers.Serializer):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                for field_name, field in original_fields.items():
-                    new_field = copy.deepcopy(field)
-                    new_field.required = False
-                    
-                    if not hasattr(new_field, 'default'):
-                        new_field.default = None
+            pass
+        
+        # Agregamos todos los campos originales al DataSerializer
 
-                    self.fields[field_name] = new_field
         
+        fields = {"test": "test"}
         
-        self.fields["data"] = DataSerializer(required=False,)
-        self.fields["status"] = serializers.IntegerField(required=False,)
-        self.fields["method"] = serializers.CharField(required=False,)
-        self.fields["url"] = serializers.CharField(required=False,)
-        self.fields["errors"] = serializers.DictField(required=False, default=dict)
-        
-        
+        for name, field in original_fields.items():
+            fields[name] = field
+
+        # Definimos la estructura final del serializer
+        self.fields['data'] = serializers.DictField(default=fields)
+        self.fields['status'] = serializers.IntegerField(required=False)
+        self.fields['method'] = serializers.CharField(required=False)
+        self.fields['url'] = serializers.CharField(required=False)
+        self.fields['errors'] = serializers.DictField(required=False, default=dict)

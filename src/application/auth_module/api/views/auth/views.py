@@ -10,10 +10,9 @@ from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
 from src.application.auth_module.api.serializers.resource_serializers import ResourceSerializer
-from src.application.auth_module.api.serializers.auth_serializer import AuthSerializer, SchemaResponseLogin
+from src.application.auth_module.api.serializers.auth_serializer import AuthSerializer, SchemaResponseLogin, SchemaResponseResources
 from src.application.auth_module.api.serializers.user_serializers import UserSerializer
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 
 class AuthView(ViewSet):
     
@@ -46,12 +45,14 @@ class AuthView(ViewSet):
             return Response({ "token" :{ **token } }, status=status.HTTP_200_OK)
         return Response({"Invalid credentias"}, status=status.HTTP_401_UNAUTHORIZED)
 
-
+    @extend_schema(
+        responses={200: SchemaResponseResources}
+    )
     @action(detail=False, methods=["GET"])
     def getResources(self, request):
+        
         roles = [x.id for x in request.user.roles.all()]
         resources = self.get_service.getAllResourcesByRol(related={"resource_parent"},filter={"rol__in": roles})
-        
         user = UserSerializer([request.user], many=True)
         
         return Response({"user": user.data[0], "resources": resources["data"]},status=status.HTTP_200_OK)
