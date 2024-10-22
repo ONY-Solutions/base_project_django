@@ -44,7 +44,7 @@ jobs:
       - name: Checkout ArgoCD repository
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.repository_owner }}/${{ env.PROJECT_PATH }}
+          repository: nleea/${{ env.PROJECT_PATH }}
           token: ${{ secrets.PAT_TOKEN }}
           path: ${{ env.PROJECT_PATH }}
 
