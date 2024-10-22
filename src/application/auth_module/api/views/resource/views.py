@@ -10,7 +10,7 @@ from src.application.auth_module.api.serializers.resource_serializers import (
     ResourceSerializer
 )
 from src.application.auth_module.api.validators.resource_validators import (
-    ResourcesPayloadValidateSerializer
+    ResourcesPayloadValidateSerializer, ResourceUpdateSerializer
 )
 
 
@@ -41,7 +41,7 @@ class ResourceViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         data = request.data
-        serializer = ResourceSerializer(data=data)
+        serializer = ResourceUpdateSerializer(data=data)
 
         if serializer.is_valid():
             res = self.get_service.update(pk, serializer.data)

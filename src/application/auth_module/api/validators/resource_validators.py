@@ -20,3 +20,12 @@ class ResourcesPayloadValidateSerializer(serializers.Serializer):
             raise serializers.ValidationError("El campo 'herencia' debe ser un booleano")
   
         return data
+
+
+class ResourceUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=False)
+    path = serializers.CharField(required=False)
+    icon = serializers.CharField(required=False)
+    resource_parent = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    order = serializers.IntegerField(required=False)

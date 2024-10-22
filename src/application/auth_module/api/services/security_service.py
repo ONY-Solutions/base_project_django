@@ -87,7 +87,7 @@ class SecurityService(BaseService):
         return self.serializer(user).data
 
     def getAllResourcesByRol(self, **kwargs):
-        resources = self.resource_respository.complex_filters(**kwargs).order_by("-resource_parent")
+        resources = self.resource_respository.complex_filters(**kwargs).order_by("-order")
         return self.serializer(resources,many=True).data
 
     def get_all(self):

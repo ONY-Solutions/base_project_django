@@ -64,7 +64,7 @@ class ResourceService(BaseService):
         return response
 
     def update(self, pk, payload):
-        return self.serializer(self.repository.update(pk, payload)).data
+        return self.serializer(self.repository.update(pk, payload), partial=True).data
 
     def delete(self, pk):
         return self.serializer(self.repository.delete(pk)).data
