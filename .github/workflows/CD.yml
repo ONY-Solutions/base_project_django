@@ -51,11 +51,11 @@ jobs:
       - name: Update Deployment image
         run: |
           cd ${{ env.PROJECT_PATH }}/base/apps
-          sed -i "s|${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:.*|${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}|" deployment.yaml
+          sed -i "s|${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:.*|${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}|" deployment.yml
 
           git config --global user.email "ci@github.com"
           git config --global user.name "GitHub Actions"
 
-          git add deployment.yaml
+          git add deployment.yml
           git diff-index --quiet HEAD || git commit -m "Update base_django image to ${{ env.VERSION }}"
           git push
