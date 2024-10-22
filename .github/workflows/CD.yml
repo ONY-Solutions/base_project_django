@@ -6,6 +6,7 @@ on:
 
 env:
   IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+  PROJECT_PATH: ${{ secrets.PROJECT_PATH }}
 
 jobs:
   build-and-push-image:
@@ -39,3 +40,22 @@ jobs:
       - name: Output version
         run: |
           echo "Deployed version: ${{ env.VERSION }}"
+
+      - name: Checkout ArgoCD repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/${{ env.PROJECT_PATH }}
+          token: ${{ secrets.PAT_TOKEN }}
+          path: ${{ env.PROJECT_PATH }}
+
+      - name: Update Deployment image
+        run: |
+          cd ${{ env.PROJECT_PATH }}/base/apps
+          sed -i "s|${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:.*|${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}|" deployment.yaml
+
+          git config --global user.email "ci@github.com"
+          git config --global user.name "GitHub Actions"
+
+          git add deployment.yaml
+          git diff-index --quiet HEAD || git commit -m "Update base_django image to ${{ env.VERSION }}"
+          git push
