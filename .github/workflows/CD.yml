@@ -27,7 +27,10 @@ jobs:
 
       - name: Get version number based on commits
         id: vars
-        run: echo "VERSION=v$(printf "%03d" $(git rev-list --count HEAD))" >> $GITHUB_ENV
+        run: |
+          LATEST_TAG=$(curl -s "https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}/tags" | jq -r '.results[0].name' | sed 's/v//')
+          NEW_VERSION=$((LATEST_TAG + 1))
+          echo "VERSION=v$(printf "%03d" $NEW_VERSION)" >> $GITHUB_ENV
 
       - name: Build and push multi-platform Docker image
         run: |
