@@ -1,7 +1,5 @@
 from src.application.auth_module.api.repositories.rol_permission_repository import RolPermissionRepository
-from src.domain.error_handlres import ErrorHandler
 from src.infrastructure.base_service import BaseService
-from django.db import transaction
 
 
 class RolPermissionService(BaseService):

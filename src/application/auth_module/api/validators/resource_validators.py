@@ -2,11 +2,11 @@ from rest_framework import serializers
 from src.application.auth_module.api.serializers.resource_serializers import ResourceSerializer
 
 class ResourcesPayloadValidateSerializer(serializers.Serializer):
-    herencia = serializers.BooleanField()
     resources = ResourceSerializer(many=True)
+    parent = serializers.CharField(required=False)
 
     def validate(self, data):
-        for campo in ['herencia', 'resources']:
+        for campo in ['resources']:
             if campo not in data:
                 raise serializers.ValidationError(f"El campo '{campo}' es requerido")
             
@@ -16,9 +16,6 @@ class ResourcesPayloadValidateSerializer(serializers.Serializer):
         if not len(data['resources']) > 0:
             raise serializers.ValidationError("El campo 'resources' no puede estar vacio")
 
-        if not isinstance(data['herencia'], bool):
-            raise serializers.ValidationError("El campo 'herencia' debe ser un booleano")
-  
         return data
 
 

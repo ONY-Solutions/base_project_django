@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from src.application.auth_module.api.serializers.rol_serializer import RolValidateSerializer
-from src.application.default.base_serializer import BaseSerializer
 
 class PermissionValidateSerializer(serializers.Serializer):
     name = serializers.CharField()
