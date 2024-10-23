@@ -15,6 +15,7 @@ from src.application.auth_module.models import (
 
 # Register your models here.
 
+admin.site.register(Master)
 admin.site.register(City)
 admin.site.register(Country)
 admin.site.register(Rol)

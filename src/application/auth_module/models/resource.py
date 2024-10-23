@@ -12,6 +12,7 @@ class Resource(BaseModel):
     rol = models.ManyToManyField(
         "Rol", through="Rol_Resource", related_name="rol_resources"
     )
+    order = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "resource"

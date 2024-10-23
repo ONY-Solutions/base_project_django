@@ -17,16 +17,10 @@ class PermissionView(ViewSet):
     def get_service(self):
         return AuthModuleRepositoryFactory.get_permission_service(self.get_serializer_class())
 
-    @extend_schema(
-        responses={200: SchemaResponsePermissions},
-    )
     def list(self, request):
         res = self.get_service.get_all()
         return Response(**res)
 
-    @extend_schema(
-        responses={200: SchemaResponsePermissions},
-    )
     def retrieve(self, request, pk=None):
         
         """_summary_

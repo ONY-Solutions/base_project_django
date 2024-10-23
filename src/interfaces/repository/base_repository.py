@@ -9,7 +9,12 @@ class BaseRepository(ABC):
     def get_all(self, visible=True):
         return self.Model.objects.filter(visible=visible)
 
-    def filter_custom(self, **kwargs):
+    def filter_custom(self, *args, **kwargs):
+        
+        if args:
+            print(*args)
+            return self.Model.objects.filter(*args)
+
         return self.Model.objects.filter(**kwargs)
 
     def complex_filters(self, **kwargs):
@@ -51,6 +56,9 @@ class BaseRepository(ABC):
 
     def create(self, data):
         return self.Model.objects.create(**data)
+        
+    def bulk_create(self,data):
+        return self.Model.objects.bulk_create(data)
 
     def update(self, pk, data):
         query = self.Model.objects.get(id=pk, visible=True)
