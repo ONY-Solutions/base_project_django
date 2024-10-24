@@ -1,17 +1,15 @@
-from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
-from src.application.auth_module.api.serializers.permission_serializer import PermissionValidateSerializer, PermissionUpdateValidateSerializer, RolPermissionSerializer
+from src.application.auth_module.api.serializers.permission_serializer import PermissionValidateSerializer, PermissionUpdateValidateSerializer, PermissionCreateValidateSerializer
 from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory,
 )
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
-from src.application.auth_module.api.serializers.permission_serializer import SchemaResponsePermissions
 
 class PermissionView(ViewSet):
 
     def get_serializer_class(self):
-        return PermissionValidateSerializer
+        return PermissionCreateValidateSerializer
 
     @property
     def get_service(self):
@@ -41,6 +39,7 @@ class PermissionView(ViewSet):
             return Response(**res)
         return Response(serializer.errors, 404)
 
+    @extend_schema(request=PermissionUpdateValidateSerializer)
     def update(self, request, pk=None):
 
         data = request.data
