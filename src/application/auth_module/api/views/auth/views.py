@@ -53,7 +53,10 @@ class AuthView(ViewSet):
         
         roles = [x.id for x in request.user.roles.all()]
         resources = self.get_service.getAllResourcesByRol(related={"resource_parent"},filter={"rol__in": roles})
-        user = UserSerializer([request.user], many=True)
+        user = UserSerializer([request.user], many=True)    
+        
+        if resources["status"] != 200:
+            return Response(resources["data"],status=resources["status"])
         
         return Response({"user": user.data[0], "resources": resources["data"]},status=status.HTTP_200_OK)
 
