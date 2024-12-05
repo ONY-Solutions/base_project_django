@@ -38,12 +38,16 @@ class PersonViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         person = self.get_service.get_by_id(pk)
+        
         if person is None:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
         serializer = PersonSerializer(person, data=request.data)
+        
         if serializer.is_valid():
             updated_person = self.get_service.update(pk, serializer.validated_data)
             return Response(**updated_person)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):

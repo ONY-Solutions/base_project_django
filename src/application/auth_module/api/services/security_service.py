@@ -78,6 +78,10 @@ class SecurityService(BaseService):
 
         return self.serializer({"OK": "OK"}).data
 
+    def getAllRolesByUser(self, user_id):
+        roles  = self.rol_repository.filter_custom(user_roles=user_id)
+        return self.serializer(roles, many=True).data
+    
     @atomic
     def asingUserRol(self, pk, data):
         

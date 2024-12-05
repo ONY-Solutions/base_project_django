@@ -12,7 +12,6 @@ class BaseRepository(ABC):
     def filter_custom(self, *args, **kwargs):
         
         if args:
-            print(*args)
             return self.Model.objects.filter(*args)
 
         return self.Model.objects.filter(**kwargs)
