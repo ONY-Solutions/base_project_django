@@ -21,45 +21,26 @@ class ResourceService(BaseService):
 
     def create(self, payload):
         path_or_id = payload.get("parent",None)
-        resources_data = payload['resources']
+        resources_data = payload.get('resources',[])
         resources_list = []
         response = ResponseMessages.CREATED
-        
-        if path_or_id:
-            queryset = self.repository.filter_custom(Q(id=path_or_id) | Q(path=path_or_id)).first()
-            
-            for resource_data in resources_data:
+        queryset = self.repository.filter_custom(Q(id=path_or_id) | Q(path=path_or_id)).first()
+
+        for resource_data in resources_data:
                 path = resource_data.get("path", None)
                 name = resource_data.get("name", None)
                 icon = resource_data.get("icon", "")
 
-                if path is not None:
-                    model = self.repository.Model(
-                            path=path,
-                            resource_parent_id= queryset.pk,
-                            name=name,
-                            icon=icon
-                        )
-                    resources_list.append(model)
-            response = self.serializer(resources_list,many=True).data
-            self.repository.bulk_create(resources_list)  
-        else:
-            resources_created = []
-            for resource_data in resources_data:
-                path = resource_data.get("path", None)
-                name = resource_data.get("name", None)
-                icon = resource_data.get("icon", "")
+                model = self.repository.Model(
+                    path=path,
+                    resource_parent=queryset,
+                    name=name,
+                    icon=icon
+                )
 
-                if path is not None:
-                    dataValue = {
-                            "path":path,
-                            "name":name,
-                            "icon":icon
-                        }
-         
-                    instance = self.repository.create(dataValue)
-                    resources_created.append(instance)
-            response = self.serializer(resources_created,many=True).data
+                resources_list.append(model)
+        self.repository.bulk_create(resources_list)
+
         return response
 
     def update(self, pk, payload):

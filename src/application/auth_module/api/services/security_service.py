@@ -9,9 +9,10 @@ from src.application.auth_module.api.repositories.permission_repository import (
 from src.application.auth_module.api.repositories.user_repository import UserRepository
 from src.application.auth_module.api.repositories.rol_permission_repository import RolPermissionRepository
 from src.infrastructure.base_service import BaseService
+from src.infrastructure.raw_services import RawServicesBase
 from django.db.transaction import atomic
 
-class SecurityService(BaseService):
+class SecurityService(BaseService, RawServicesBase):
 
     model = "RolResource"
 
@@ -33,17 +34,14 @@ class SecurityService(BaseService):
     @atomic
     def updateResourcesByRol(self, pk, data):
         rol = self.rol_repository.get_by_id(pk)
-        resources = self.resource_respository.filter_custom(rol=rol.pk)
-        current_resources_ids = set(resources.values_list('id', flat=True))
+        resources = self.resource_respository.filter_custom(rol=rol.pk).values_list('id', flat=True)
+        current_resources_ids = set(resources)
         payload_resources_ids = set(data)
 
         resources_to_add = payload_resources_ids - current_resources_ids
-        resources_to_remove = current_resources_ids.symmetric_difference(payload_resources_ids)
+        resources_to_remove = current_resources_ids.difference(payload_resources_ids)
         
-        for resource in resources_to_remove:
-            x = self.rol_resource_repository.filter_custom(resource_id=resource).first()
-            if x is not None:
-                x.delete()
+        self.delete_many_records(model=self.rol_resource_repository.Model, resource_id__in=list(resources_to_remove))
 
         for resource in resources_to_add:
             body = {"rol_id": rol.pk, "resource_id": resource}
@@ -60,17 +58,14 @@ class SecurityService(BaseService):
     @atomic
     def updatePermissionByRol(self, pk, data):
         rol = self.rol_repository.get_by_id(pk)
-        permissions = self.permission_repository.filter_custom(rol=rol.pk)
-        current_permissions_ids = set(permissions.values_list('id', flat=True))
+        permissions = self.permission_repository.filter_custom(rol=rol.pk).values_list('id', flat=True)
+        current_permissions_ids = set(permissions)
         payload_permissions_ids = set(data)
 
         permissions_to_add = payload_permissions_ids - current_permissions_ids
-        permissions_to_remove = current_permissions_ids.symmetric_difference(payload_permissions_ids)
+        permissions_to_remove = current_permissions_ids.difference(payload_permissions_ids)
 
-        for permission in permissions_to_remove:
-            x = self.rol_permission_repository.filter_custom(permission_id=permission).first()
-            if x is not None:
-                x.delete()
+        self.delete_many_records(model=self.rol_permission_repository.Model, resource_id__in=list(permissions_to_remove))
 
         for permission in permissions_to_add:
             body = {"rol_id": rol.pk, "permission_id": permission}
