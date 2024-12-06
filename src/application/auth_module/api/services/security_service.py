@@ -14,7 +14,7 @@ from django.db.transaction import atomic
 
 class SecurityService(BaseService, RawServicesBase):
 
-    model = "RolResource"
+    model = "SECURITY"
 
     def __init__(self, rol_repository: RolRepository, resource_respository: ResourceRepository, rol_resource_repository: RolResourceRepository, permission_repository: PermissionRepository,rol_permission_repository: RolPermissionRepository, user_repository: UserRepository ,serializer) -> None:
         self.rol_repository = rol_repository
@@ -41,10 +41,11 @@ class SecurityService(BaseService, RawServicesBase):
         resources_to_add = payload_resources_ids - current_resources_ids
         resources_to_remove = current_resources_ids.difference(payload_resources_ids)
         
+        """ DELETE RECORDS """
         self.delete_many_records(model=self.rol_resource_repository.Model, resource_id__in=list(resources_to_remove))
-
+        
         for resource in resources_to_add:
-            body = {"rol_id": rol.pk, "resource_id": resource}
+            body = {"rol": rol, "resource_id": resource}
             self.rol_resource_repository.create(body)
 
         return self.serializer({"OK": "OK"}).data
@@ -64,11 +65,12 @@ class SecurityService(BaseService, RawServicesBase):
 
         permissions_to_add = payload_permissions_ids - current_permissions_ids
         permissions_to_remove = current_permissions_ids.difference(payload_permissions_ids)
-
-        self.delete_many_records(model=self.rol_permission_repository.Model, resource_id__in=list(permissions_to_remove))
+        
+        """ DELETE RECORDS """
+        self.delete_many_records(model=self.rol_permission_repository.Model, permission_id__in=list(permissions_to_remove))
 
         for permission in permissions_to_add:
-            body = {"rol_id": rol.pk, "permission_id": permission}
+            body = {"rol": rol, "permission_id": permission}
             self.rol_permission_repository.create(body)
 
         return self.serializer({"OK": "OK"}).data

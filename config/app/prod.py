@@ -3,7 +3,7 @@ from config.db.database import DATABASE_CONFIG
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["*","192.168.20.32"]
+ALLOWED_HOSTS = ["*","192.168.20.101"]
 
 THIRDS_APPS += []
 

@@ -9,6 +9,7 @@ class Permission(BaseModel):
     rol = models.ManyToManyField(
         "Rol", through="Rol_Permission", related_name="rol_permissions"
     )
+        
 
     class Meta:
         verbose_name = "permission"
