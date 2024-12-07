@@ -59,28 +59,28 @@ class AuthModuleRepositoryFactory:
         return PersonService(repository, serializer)
 
     @staticmethod
-    def get_rol_service(serializer):
+    def get_rol_service():
         repository = AuthModuleRepositoryFactory.get_rol_repository()
-        return RolService(repository, serializer)
+        return RolService(repository)
 
     @staticmethod
-    def get_resource_service(serializer):
+    def get_resource_service():
         repository = AuthModuleRepositoryFactory.get_resource_repository()
-        return ResourceService(repository, serializer)
+        return ResourceService(repository)
 
     @staticmethod
-    def get_permission_service(serializer):
+    def get_permission_service():
         repository = AuthModuleRepositoryFactory.get_permission_repository()
         rol_repository = AuthModuleRepositoryFactory.get_rol_repository()
-        return PermissionService(repository, rol_repository, serializer)
+        return PermissionService(repository, rol_repository)
 
     @staticmethod
-    def get_rol_permission_service(serializer):
+    def get_rol_permission_service():
         repository = AuthModuleRepositoryFactory.get_rol_permission_repository()
-        return RolPermissionService(repository, serializer)
+        return RolPermissionService(repository)
 
     @staticmethod
-    def get_security_service(serializer):
+    def get_security_service():
         rol_repository = AuthModuleRepositoryFactory.get_rol_repository()
         resource_repository = AuthModuleRepositoryFactory.get_resource_repository()
         rol_resource_repository = AuthModuleRepositoryFactory.get_rol_resource_repository()
@@ -88,4 +88,4 @@ class AuthModuleRepositoryFactory:
         rol_permission_repository = AuthModuleRepositoryFactory.get_rol_permission_repository()
         user_repository = AuthModuleRepositoryFactory.get_user_repository()
 
-        return SecurityService(rol_repository, resource_repository,rol_resource_repository,permission_repository,rol_permission_repository, user_repository ,serializer)
+        return SecurityService(rol_repository, resource_repository,rol_resource_repository,permission_repository,rol_permission_repository, user_repository)

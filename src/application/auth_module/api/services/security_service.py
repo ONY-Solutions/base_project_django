@@ -16,14 +16,13 @@ class SecurityService(BaseService, RawServicesBase):
 
     model = "SECURITY"
 
-    def __init__(self, rol_repository: RolRepository, resource_respository: ResourceRepository, rol_resource_repository: RolResourceRepository, permission_repository: PermissionRepository,rol_permission_repository: RolPermissionRepository, user_repository: UserRepository ,serializer) -> None:
+    def __init__(self, rol_repository: RolRepository, resource_respository: ResourceRepository, rol_resource_repository: RolResourceRepository, permission_repository: PermissionRepository,rol_permission_repository: RolPermissionRepository, user_repository: UserRepository) -> None:
         self.rol_repository = rol_repository
         self.resource_respository = resource_respository
         self.rol_resource_repository = rol_resource_repository
         self.permission_repository = permission_repository
         self.rol_permission_repository = rol_permission_repository
         self.user_repository = user_repository
-        self.serializer = serializer
 
     def getResourcesByRol(self, pk):
         rol = self.rol_repository.get_by_id(pk)
@@ -34,7 +33,7 @@ class SecurityService(BaseService, RawServicesBase):
     @atomic
     def updateResourcesByRol(self, pk, data):
         rol = self.rol_repository.get_by_id(pk)
-        resources = self.resource_respository.filter_custom(rol=rol.pk).values_list('id', flat=True)
+        resources = self.resource_respository.filter_custom(rol=rol).values_list('id', flat=True)
         current_resources_ids = set(resources)
         payload_resources_ids = set(data)
 
@@ -42,7 +41,7 @@ class SecurityService(BaseService, RawServicesBase):
         resources_to_remove = current_resources_ids.difference(payload_resources_ids)
         
         """ DELETE RECORDS """
-        self.delete_many_records(model=self.rol_resource_repository.Model, resource_id__in=list(resources_to_remove))
+        self.records_to_delete_by_bulk(model=self.rol_resource_repository.Model, resource_id__in=list(resources_to_remove))
         
         for resource in resources_to_add:
             body = {"rol": rol, "resource_id": resource}
@@ -59,7 +58,7 @@ class SecurityService(BaseService, RawServicesBase):
     @atomic
     def updatePermissionByRol(self, pk, data):
         rol = self.rol_repository.get_by_id(pk)
-        permissions = self.permission_repository.filter_custom(rol=rol.pk).values_list('id', flat=True)
+        permissions = self.permission_repository.filter_custom(rol=rol).values_list('id', flat=True)
         current_permissions_ids = set(permissions)
         payload_permissions_ids = set(data)
 
@@ -67,7 +66,7 @@ class SecurityService(BaseService, RawServicesBase):
         permissions_to_remove = current_permissions_ids.difference(payload_permissions_ids)
         
         """ DELETE RECORDS """
-        self.delete_many_records(model=self.rol_permission_repository.Model, permission_id__in=list(permissions_to_remove))
+        self.records_to_delete_by_bulk(model=self.rol_permission_repository.Model, permission_id__in=list(permissions_to_remove))
 
         for permission in permissions_to_add:
             body = {"rol": rol, "permission_id": permission}

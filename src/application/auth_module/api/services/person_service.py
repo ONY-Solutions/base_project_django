@@ -1,12 +1,9 @@
-from src.application.auth_module.api.repositories.persons_repository import (
-    PersonRepository,
-)
 from src.infrastructure.base_service import BaseService
-
+from src.interfaces.repository.base_repository import BaseRepository
 
 class PersonService(BaseService):
 
-    def __init__(self, repository: PersonRepository, serializer) -> None:
+    def __init__(self, repository: BaseRepository, serializer) -> None:
         self.repository = repository
         self.serializer = serializer
 

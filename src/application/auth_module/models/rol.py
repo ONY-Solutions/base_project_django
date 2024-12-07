@@ -32,7 +32,6 @@ class Rol_Permission(BaseModel, AuditModelMixin):
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        print("sss")
         if not self.permission.visible:
             raise ValidationError(f"The permission '{self.permission.name}' must be visible to be assigned to a role.")
         return super().save(*args, **kwargs)

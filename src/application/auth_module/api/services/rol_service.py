@@ -1,12 +1,11 @@
-from src.application.auth_module.api.repositories.rol_repository import RolRepository
 from src.infrastructure.base_service import BaseService
+from src.interfaces.repository.base_repository import BaseRepository
 
 class RolService(BaseService):
     model = "Rol"
 
-    def __init__(self, repository: RolRepository, serializer) -> None:
+    def __init__(self, repository: BaseRepository) -> None:
         self.repository = repository
-        self.serializer = serializer
 
     def get_all(self):
         return self.repository.get_all()

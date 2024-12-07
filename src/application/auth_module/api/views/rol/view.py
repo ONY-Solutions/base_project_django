@@ -14,7 +14,7 @@ class RolView(BaseViewSet):
 
     @property
     def get_service(self):
-        return AuthModuleRepositoryFactory.get_rol_service(self.get_serializer_class())
+        return AuthModuleRepositoryFactory.get_rol_service()
 
     def list(self, request):
         res = self.get_service.get_all()

@@ -30,7 +30,7 @@ class SecurityViewSet(viewsets.ViewSet):
 
     @property
     def get_service(self):
-        return AuthModuleRepositoryFactory.get_security_service(self.get_serializer_class())
+        return AuthModuleRepositoryFactory.get_security_service()
     
     @action(detail=False, methods=["POST"], url_path="assingUserRol/(?P<pk>[^/.]+)")
     @handle_view_errors()
