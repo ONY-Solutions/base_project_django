@@ -40,14 +40,17 @@ class SecurityService(BaseService, RawServicesBase):
         resources_to_add = payload_resources_ids - current_resources_ids
         resources_to_remove = current_resources_ids.difference(payload_resources_ids)
         
+        
+        resources_to_response = []
+        
         """ DELETE RECORDS """
         self.records_to_delete_by_bulk(model=self.rol_resource_repository.Model, resource_id__in=list(resources_to_remove))
         
         for resource in resources_to_add:
             body = {"rol": rol, "resource_id": resource}
-            self.rol_resource_repository.create(body)
+            resources_to_response.append(self.rol_resource_repository.create(body))
 
-        return self.serializer({"OK": "OK"}).data
+        return resources_to_response
 
     def getPermissionsByRol(self, pk):
         rol = self.rol_repository.get_by_id(pk)
@@ -68,15 +71,17 @@ class SecurityService(BaseService, RawServicesBase):
         """ DELETE RECORDS """
         self.records_to_delete_by_bulk(model=self.rol_permission_repository.Model, permission_id__in=list(permissions_to_remove))
 
+        permissions_to_response = []
+
         for permission in permissions_to_add:
             body = {"rol": rol, "permission_id": permission}
-            self.rol_permission_repository.create(body)
+            permissions_to_response.append(self.rol_permission_repository.create(body))
 
-        return self.serializer({"OK": "OK"}).data
+        return permissions_to_response
 
     def getAllRolesByUser(self, user_id):
         roles  = self.rol_repository.filter_custom(user_roles=user_id)
-        return self.serializer(roles, many=True).data
+        return roles
     
     @atomic
     def asingUserRol(self, pk, data):
@@ -88,7 +93,7 @@ class SecurityService(BaseService, RawServicesBase):
 
     def getAllResourcesByRol(self, **kwargs):
         resources = self.resource_respository.complex_filters(**kwargs).order_by("-order")
-        return self.serializer(resources,many=True).data
+        return resources
 
     def get_all(self):
         pass

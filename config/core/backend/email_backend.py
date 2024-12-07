@@ -9,7 +9,6 @@ UserModel = get_user_model()
 class EmailBackend(ModelBackend):
     @sensitive_variables("username", "password")
     def authenticate(self, request, username, password, **kwargs):
-        print(username,password)
         try:
             username_kwarg = kwargs.get("username", "")
             user = UserModel.objects.get(

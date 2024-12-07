@@ -8,25 +8,27 @@ from src.application.auth_module.api.repositories.factory_repository import (
     AuthModuleRepositoryFactory
 )
 from src.application.auth_module.api.serializers.security_serializers import (
-    ResourcesByRolSerializer, PermissionByRolSerializer, 
+    ResourcesByRolSerializer, 
 )
 from src.application.auth_module.api.validators.security_validators import RolResourceValidate, RolPermissionsValidate, UserRolValidator
 from src.application.auth_module.api.serializers.user_serializers import UserSerializer
 from drf_spectacular.utils import extend_schema
 from src.interfaces.helpers.error_handrer_catch import handle_view_errors
+from src.application.default.view_default import BaseViewSet
+from src.application.auth_module.api.serializers.rol_permission_serializer import RolPermissionSerializer
+from src.application.auth_module.api.serializers.rol_resource_serializer import RolResourceSerializer
 
-class SecurityViewSet(viewsets.ViewSet):
+class SecurityViewSet(BaseViewSet):
 
     def get_serializer_class(self):
-        if self.action in ["getResourcesByRol", "updateResourcesByRol"]:
+        if self.action in ["getResourcesByRol"]:
             return ResourcesByRolSerializer
         elif self.action in ["assingUserRol"]:
             return UserSerializer
-        return PermissionByRolSerializer
+        elif self.action == "updatePermissionByRol":
+            return RolPermissionSerializer
+        return RolResourceSerializer
 
-    def get_serializer_data(self, data_to_serializar):
-        serializer = self.get_serializer_class()
-        return serializer(data_to_serializar)
 
     @property
     def get_service(self):
@@ -60,8 +62,8 @@ class SecurityViewSet(viewsets.ViewSet):
 
         if validate.is_valid():
             service_response = self.get_service.updateResourcesByRol(pk, validate.data["resources"])
-            serializer = self.get_serializer_data(service_response).data
-            return Response({**serializer}, status=status.HTTP_200_OK)
+            serializer = self.get_serializer_data(service_response, many=True).data
+            return Response(serializer, status=status.HTTP_200_OK)
 
         return Response(validate.errors,status=status.HTTP_400_BAD_REQUEST)
 
@@ -81,7 +83,7 @@ class SecurityViewSet(viewsets.ViewSet):
         if validate.is_valid():
 
             service_response = self.get_service.updatePermissionByRol(pk, validate.data["permissions"])
-            serializer = self.get_serializer_data(service_response).data
-            return Response({**serializer}, status=status.HTTP_200_OK)
+            serializer = self.get_serializer_data(service_response, many=True).data
+            return Response(serializer, status=status.HTTP_200_OK)
 
         return Response(validate.errors,status=status.HTTP_400_BAD_REQUEST)

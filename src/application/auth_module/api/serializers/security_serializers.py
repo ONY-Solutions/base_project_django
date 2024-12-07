@@ -9,7 +9,6 @@ class ResourcesByRolSerializer(serializers.Serializer):
     rol = RolValidateSerializer(read_only=True)
     resources = ResourceSerializer(many=True, read_only=True)
 
-
 class PermissionByRolSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     rol = RolValidateSerializer(read_only=True)
