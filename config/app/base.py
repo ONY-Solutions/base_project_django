@@ -40,7 +40,8 @@ THIRDS_APPS = [
 ]
 
 MY_APPS = [
-    'src.application.auth_module'
+    'src.application.auth_module',
+    'src.application.default'
 ]
 
 AUTH_USER_MODEL = 'auth_module.User'
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'config.core.middlewares.request.RequestMiddleware',
     'config.core.middlewares.response.CustomResponseMiddleware',
     'config.core.middlewares.auth_middleware.CustomMiddleware',
+    'config.core.middlewares.auditLog.AuditMiddleware'
     
 ]
 

@@ -3,9 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from src.application.default.base_models import BaseModel
 from src.application.auth_module.models.rol import Rol
+from src.application.default.mixins import AuditModelMixin
 
-
-class Master(BaseModel):
+class Master(BaseModel, AuditModelMixin):
     code = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200)
     order = models.IntegerField(null=True, blank=True)
@@ -67,7 +67,7 @@ class Person(BaseModel):
         verbose_name_plural = "Persons"
 
 
-class User(AbstractUser, BaseModel):
+class User(AbstractUser, BaseModel, AuditModelMixin):
     username = models.CharField(blank=False, null=False, unique=True, max_length=256)
     password = models.CharField(max_length=100)
     person = models.ForeignKey(

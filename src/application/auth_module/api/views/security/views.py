@@ -12,6 +12,7 @@ from src.application.auth_module.api.serializers.security_serializers import (
 )
 from src.application.auth_module.api.validators.security_validators import RolResourceValidate, RolPermissionsValidate, UserRolValidator
 from src.application.auth_module.api.serializers.user_serializers import UserSerializer
+from drf_spectacular.utils import extend_schema
 class SecurityViewSet(viewsets.ViewSet):
 
     def get_serializer_class(self):
@@ -40,6 +41,7 @@ class SecurityViewSet(viewsets.ViewSet):
         res = self.get_service.getResourcesByRol(pk)
         return Response(**res)
 
+    @extend_schema(request=RolResourceValidate)
     @action(detail=False, methods=["PUT"], url_path="updateResourcesByRol/(?P<pk>[^/.]+)")
     def updateResourcesByRol(self, request, pk=None):
         validate = RolResourceValidate(data=request.data)
@@ -55,6 +57,7 @@ class SecurityViewSet(viewsets.ViewSet):
         res = self.get_service.getPermissionsByRol(pk)
         return Response(**res) 
 
+    @extend_schema(request=RolPermissionsValidate)
     @action(detail=False, methods=["PUT"], url_path="updatePermissionByRol/(?P<pk>[^/.]+)")
     def updatePermissionByRol(self, request, pk=None):
 

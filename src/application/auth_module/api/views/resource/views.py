@@ -1,6 +1,6 @@
 # views.py
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.response import Response
 
 from src.application.auth_module.api.repositories.factory_repository import (
@@ -12,7 +12,7 @@ from src.application.auth_module.api.serializers.resource_serializers import (
 from src.application.auth_module.api.validators.resource_validators import (
     ResourcesPayloadValidateSerializer, ResourceUpdateSerializer
 )
-
+from drf_spectacular.utils import extend_schema
 
 class ResourceViewSet(viewsets.ViewSet):
 
@@ -33,12 +33,14 @@ class ResourceViewSet(viewsets.ViewSet):
         res = self.get_service.get_by_id(pk)
         return Response(**res)
 
+    @extend_schema(request=ResourcesPayloadValidateSerializer)
     def create(self, request):
         ResourcesPayloadValidateSerializer().validate(request.data)
         data = request.data
         res = self.get_service.create(data)
         return Response(**res)
 
+    @extend_schema(request=ResourceUpdateSerializer)
     def update(self, request, pk=None):
         data = request.data
         serializer = ResourceUpdateSerializer(data=data)
