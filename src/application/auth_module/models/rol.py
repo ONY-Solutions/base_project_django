@@ -3,7 +3,7 @@ from src.application.default.base_models import BaseModel
 from src.application.auth_module.models.resource import Resource
 from src.application.auth_module.models.permissions import Permission
 from django.core.exceptions import ValidationError
-
+from src.application.default.mixins import AuditModelMixin
 class Rol(BaseModel):
     name = models.CharField(max_length=30, null=False, unique=True)
     resources = models.ManyToManyField(
@@ -18,7 +18,7 @@ class Rol(BaseModel):
         verbose_name_plural = "roles"
     
 
-class Rol_Resource(BaseModel):
+class Rol_Resource(BaseModel, AuditModelMixin):
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     resource = models.ForeignKey(Resource, on_delete=models.CASCADE)
 
@@ -27,7 +27,7 @@ class Rol_Resource(BaseModel):
             raise ValidationError(f"The resource '{self.resource.name}' must be visible to be assigned to a role.")
         return super().save(*args, **kwargs)
 
-class Rol_Permission(BaseModel):
+class Rol_Permission(BaseModel, AuditModelMixin):
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     permission = models.ForeignKey(Permission, on_delete=models.CASCADE)
 

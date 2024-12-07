@@ -55,9 +55,9 @@ class BaseRepository(ABC):
 
     def create(self, data):
         return self.Model.objects.create(**data)
-        
+ 
     def bulk_create(self,data):
-        return self.Model.objects.bulk_create(data)
+        return self.Model.bulk_create_update_with_signals(data)
 
     def update(self, pk, data):
         query = self.Model.objects.get(id=pk, visible=True)
