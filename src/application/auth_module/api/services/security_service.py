@@ -29,7 +29,7 @@ class SecurityService(BaseService, RawServicesBase):
         rol = self.rol_repository.get_by_id(pk)
         resources = self.resource_respository.filter_custom(rol=pk)
         responseValue = {"rol": rol, "resources": resources}
-        return self.serializer(responseValue).data
+        return responseValue
 
     @atomic
     def updateResourcesByRol(self, pk, data):
@@ -54,7 +54,7 @@ class SecurityService(BaseService, RawServicesBase):
         rol = self.rol_repository.get_by_id(pk)
         permission = self.permission_repository.filter_custom(rol=rol.pk)    
         response_value = {"rol": rol, "permission": permission}
-        return self.serializer(response_value).data
+        return response_value
 
     @atomic
     def updatePermissionByRol(self, pk, data):
@@ -85,7 +85,7 @@ class SecurityService(BaseService, RawServicesBase):
         user = self.user_repository.get_by_id(pk)
         user.roles.set(data)
 
-        return self.serializer(user).data
+        return user
 
     def getAllResourcesByRol(self, **kwargs):
         resources = self.resource_respository.complex_filters(**kwargs).order_by("-order")

@@ -67,7 +67,7 @@ class Person(BaseModel):
         verbose_name_plural = "Persons"
 
 
-class User(AbstractUser, BaseModel, AuditModelMixin):
+class User(AbstractUser, BaseModel):
     username = models.CharField(blank=False, null=False, unique=True, max_length=256)
     password = models.CharField(max_length=100)
     person = models.ForeignKey(

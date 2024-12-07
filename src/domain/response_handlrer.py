@@ -9,12 +9,12 @@ def format_method(method):
     def wrapper(*args, **kwargs):
         try:
             result = method(*args, **kwargs)
-            return {"status": 200, "data": result}
+            return result
         except Exception as e:
             rollback()
             custom_exception_handler(e, args)
             response = ErrorHandler.handle_error(e,args[0].model)
-            return {"status":response["status"], "data": response["details"]}
+            raise Exception(response)
     return wrapper
 
 

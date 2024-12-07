@@ -14,8 +14,10 @@ from src.application.auth_module.api.serializers.auth_serializer import AuthSeri
 from src.application.auth_module.api.serializers.user_serializers import UserSerializer
 from drf_spectacular.utils import extend_schema
 from src.application.auth_module.api.serializers.rol_serializer import RolValidateSerializer
+from src.interfaces.helpers.error_handrer_catch import handle_view_errors
+from src.application.default.view_default import BaseViewSet
 
-class AuthView(ViewSet):
+class AuthView(BaseViewSet):
     factory = None
 
     def get_serializer_class(self):
@@ -46,24 +48,17 @@ class AuthView(ViewSet):
         responses={200: SchemaResponseResources}
     )
     @action(detail=False, methods=["GET"])
+    @handle_view_errors()
     def getResources(self, request):
 
         self.get_service.serializer = RolValidateSerializer
         roles = self.get_service.getAllRolesByUser(request.user.id)
-
-        if roles["status"] != 200:
-            return Response({**roles},status=status.HTTP_200_OK)
-
-        roles = [x["id"] for x in roles["data"]]
+        roles = [x["id"] for x in roles]
 
         resources = self.get_service.getAllResourcesByRol(related={"resource_parent"},filter={"rol__in": roles})
         user = UserSerializer([request.user], many=True)    
-
-        if resources["status"] != 200:
-            return Response(resources["data"],status=resources["status"])
         
-        return Response({"user": user.data[0], "resources": resources["data"]},status=status.HTTP_200_OK)
-
+        return Response({"user": user.data[0], "resources": resources},status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["POST"])
     def register(self, request):

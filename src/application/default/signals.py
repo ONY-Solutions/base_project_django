@@ -19,7 +19,6 @@ def get_model_fields(instance):
 
 @receiver(pre_save)
 def pre_save_handler(sender, instance, **kwargs):
-    print(f"pre_save: sender={sender.__name__}")
     if not should_audit_model(sender):
         return
         
@@ -31,7 +30,6 @@ def pre_save_handler(sender, instance, **kwargs):
 
 @receiver(post_save)
 def post_save_handler(sender, instance, created, **kwargs):
-    print("ENTRO")
     if not should_audit_model(sender):
         return
     

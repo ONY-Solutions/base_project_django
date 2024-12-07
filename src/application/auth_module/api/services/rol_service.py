@@ -9,20 +9,19 @@ class RolService(BaseService):
         self.serializer = serializer
 
     def get_all(self):
-        return self.serializer(self.repository.get_all(), many=True).data
-    
+        return self.repository.get_all()
     
     def get_filter(self, **kwargs):
-        return self.serializer(self.repository.filter_custom(kwargs))
+        return self.repository.filter_custom(kwargs)
 
     def get_by_id(self, pk):
-        return self.serializer(self.repository.get_by_id(pk)).data
+        return self.repository.get_by_id(pk)
 
     def create(self, data):
-        return self.serializer(self.repository.create(data)).data
+        return self.repository.create(data)
 
     def update(self, pk, data):
-        return self.serializer(self.repository.update(pk, data)).data
+        return self.repository.update(pk, data)
     
     def delete(self, pk):
-        return self.serializer(self.repository.delete(pk)).data
+        return self.repository.delete(pk)

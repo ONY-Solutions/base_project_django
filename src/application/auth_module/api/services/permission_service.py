@@ -13,21 +13,21 @@ class PermissionService(BaseService):
         self.serializer = serializer
 
     def get_all(self):
-        return self.serializer(self.repository.get_all(), many=True).data
+        return self.repository.get_all()
 
     def get_by_id(self, pk):
-        return self.serializer(self.repository.get_by_id(pk)).data
+        return self.repository.get_by_id(pk)
 
     def create(self, data):
-        return self.serializer(self.repository.create(data)).data
+        return self.repository.create(data)
 
     def update(self, pk, data):
-        return self.serializer(self.repository.update(pk, data)).data
+        return self.repository.update(pk, data)
 
     def delete(self, pk):
-        return self.serializer(self.repository.delete(pk)).data
+        return self.repository.delete(pk)
 
     def permission_by_rol(self, pk):
         rol_data = self.rol_repository.get_by_id(pk)
-        return self.serializer({"rol": rol_data, "permissions": self.repository.filter_by_rol(pk)}).data
+        return {"rol": rol_data, "permissions": self.repository.filter_by_rol(pk)}
 

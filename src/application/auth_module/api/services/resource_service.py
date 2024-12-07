@@ -14,10 +14,10 @@ class ResourceService(BaseService):
         self.serializer = serializer
 
     def get_all(self):
-        return self.serializer(self.repository.get_all(), many=True).data
+        return self.repository.get_all()
 
     def get_by_id(self, pk):
-        return self.serializer(self.repository.get_by_id(pk)).data
+        return self.repository.get_by_id(pk)
 
     def create(self, payload):
         path_or_id = payload.get("parent",None)
@@ -44,7 +44,7 @@ class ResourceService(BaseService):
         return response
 
     def update(self, pk, payload):
-        return self.serializer(self.repository.update(pk, payload), partial=True).data
+        return self.repository.update(pk, payload)
 
     def delete(self, pk):
-        return self.serializer(self.repository.delete(pk)).data
+        return self.repository.delete(pk)
