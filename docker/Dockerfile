@@ -1,11 +1,15 @@
-FROM python:3.12
-
+FROM python:3.12-alpine AS build
 WORKDIR /app
 
 COPY ./requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt && rm -rf /root/.cache/pip
 
-RUN pip install --no-cache-dir -r requirements.txt
 
+FROM python:3.12-alpine
+
+COPY --from=build /app /app
+
+WORKDIR /app
 COPY ./ /app/
 
 EXPOSE 8000

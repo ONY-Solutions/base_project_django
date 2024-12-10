@@ -1,1 +1,7 @@
 .env
+Pipfile
+.env.example
+*.txt
+.github
+__pycache__
+.git
